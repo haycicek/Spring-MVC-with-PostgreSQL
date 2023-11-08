@@ -25,5 +25,5 @@ public class Brand {
     private String name;
 
     @OneToMany(mappedBy = "brand", cascade = CascadeType.REMOVE)
-    private List<Car> cars ;
+    private List<Car> cars = new ArrayList<>();
 }

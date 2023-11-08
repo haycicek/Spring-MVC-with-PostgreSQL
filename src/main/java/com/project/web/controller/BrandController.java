@@ -28,11 +28,8 @@ public class BrandController {
     }
 
     @PostMapping("/brands/new")
-    public String saveBrand(@Valid @ModelAttribute("brand") BrandDto brandDto, BindingResult result, Model model){
-        if (result.hasErrors()){
-            model.addAttribute("brand", brandDto);
-            return "error";
-        }
+    public String saveBrand(@RequestBody() @Valid BrandDto brandDto,
+                            BindingResult result, Model model){
         brandService.saveBrand(brandDto);
         return "Brand saved";
     }
@@ -40,20 +37,16 @@ public class BrandController {
     @DeleteMapping("/brands/{brandId}/delete")
     public String deleteBrand(@PathVariable("brandId")int brandId){
         brandService.delete(brandId);
-        return "deleted";
+        return "The brand at this ID : "+brandId+" was deleted";
     }
 
     @PutMapping("/brands/{brandId}/edit")
     public String updateBrand(@PathVariable("brandId") int brandId,
-                              @Valid @ModelAttribute("brand") BrandDto brand,
+                              @RequestBody() @Valid() BrandDto brand,
                               BindingResult result, Model model){
-        if (result.hasErrors()){
-            model.addAttribute("brand",brand);
-            return "Brands could not updated";
-        }
         brand.setId(brandId);
         brandService.updateBrand(brand);
-        return "Brands updated";
+        return "The brand at this ID : "+brandId+" was updated";
     }
 
 }

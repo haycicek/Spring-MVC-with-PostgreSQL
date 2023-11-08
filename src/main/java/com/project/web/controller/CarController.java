@@ -39,35 +39,25 @@ public class CarController {
     }
 
     @PostMapping("/cars/{brandId}")
-    public String createCar(@PathVariable("brandId") Integer brandId, @ModelAttribute("car") CarDto carDto,
+    public String createCar(@PathVariable("brandId") Integer brandId,
+                            @RequestBody() @Valid CarDto carDto,
                               BindingResult result,
                               Model model) {
-        if(result.hasErrors()) {
-            model.addAttribute("car", carDto);
-            return "could not created";
-        }
         carService.createCar(brandId, carDto);
-        return "car created" + brandId;
+        return "car created for this Brand ID : " + brandId;
     }
 
     @PutMapping("/cars/{carId}/edit")
-    public String updateCar(@PathVariable("carId") Integer carId,
-                            @Valid @ModelAttribute("car") CarDto car,
+    public String updateCar(Integer carId,
+                            @RequestBody() @Valid CarDto car,
                             BindingResult result, Model model) {
-        if(result.hasErrors()) {
-            model.addAttribute("car", car);
-            return "could not updated";
-        }
-        CarDto carDto = carService.findByCarId(carId);
-        car.setId(carId);
-        car.setBrand(carDto.getBrand());
         carService.updateCar(car);
-        return "succesfully updated";
+        return "car succesfully updated at this ID : " +carId;
     }
 
     @DeleteMapping("/cars/{carId}")
     public String deleteCar(@PathVariable("carId")Integer carId) {
         carService.deleteCar(carId);
-        return "ID:"+carId.toString() +"was deleted.";
+        return "ID:"+carId +" was deleted.";
     }
 }
